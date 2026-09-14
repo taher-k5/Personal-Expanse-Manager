@@ -23,7 +23,7 @@ class Transaction extends Model
 
     protected $fillable = [
         'user_id', 'account_id', 'category_id', 'expense_group_id', 'paid_by_member_id',
-        'type', 'amount_minor', 'currency', 'base_amount_minor', 'exchange_rate',
+        'type', 'amount', 'amount_minor', 'currency', 'base_amount_minor', 'exchange_rate',
         'booked_on', 'merchant', 'normalised_merchant', 'note', 'receipt_path',
         'transfer_account_id', 'transfer_group_uuid', 'split_method',
         'recurring_transaction_id', 'is_reimbursable', 'exclude_from_budget', 'import_hash',

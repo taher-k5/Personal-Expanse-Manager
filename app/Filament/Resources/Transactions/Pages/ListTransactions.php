@@ -7,8 +7,8 @@ namespace App\Filament\Resources\Transactions\Pages;
 use App\Filament\Resources\Transactions\TransactionResource;
 use App\Models\Transaction;
 use Filament\Actions\CreateAction;
-use Filament\Resources\Components\Tab;
 use Filament\Resources\Pages\ListRecords;
+use Filament\Schemas\Components\Tabs\Tab;
 use Illuminate\Database\Eloquent\Builder;
 
 class ListTransactions extends ListRecords

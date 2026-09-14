@@ -31,7 +31,7 @@ class ExpenseGroupForm
 
                         Select::make('type')
                             ->options(GroupType::class)
-                            ->default(GroupType::Trip)
+                            ->default(GroupType::Trip->value)
                             ->live()
                             ->required(),
 
@@ -45,14 +45,14 @@ class ExpenseGroupForm
                             ->required(),
 
                         DatePicker::make('starts_on')
-                            ->visible(fn (Get $get): bool => GroupType::tryFrom((string) $get('type'))?->isTimeBound() ?? false),
+                            ->visible(fn (Get $get): bool => self::resolveType($get('type'))?->isTimeBound() ?? false),
 
                         DatePicker::make('ends_on')
                             ->afterOrEqual('starts_on')
-                            ->visible(fn (Get $get): bool => GroupType::tryFrom((string) $get('type'))?->isTimeBound() ?? false),
+                            ->visible(fn (Get $get): bool => self::resolveType($get('type'))?->isTimeBound() ?? false),
 
                         TextInput::make('destination')
-                            ->visible(fn (Get $get): bool => $get('type') === GroupType::Trip->value),
+                            ->visible(fn (Get $get): bool => self::resolveType($get('type')) === GroupType::Trip),
 
                         Textarea::make('description')->rows(2)->columnSpanFull(),
                     ]),
@@ -97,5 +97,10 @@ class ExpenseGroupForm
                             ->helperText('Anyone with the link can see the ledger. Nobody can change it.'),
                     ]),
             ]);
+    }
+
+    private static function resolveType(mixed $value): ?GroupType
+    {
+        return $value instanceof GroupType ? $value : GroupType::tryFrom((string) $value);
     }
 }

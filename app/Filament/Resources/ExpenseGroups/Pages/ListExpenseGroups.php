@@ -18,6 +18,11 @@ class ListExpenseGroups extends ListRecords
         return [
             CreateAction::make()
                 ->label('Start a trip')
+                ->mutateFormDataUsing(function (array $data): array {
+                    $data['owner_id'] = auth()->id();
+
+                    return $data;
+                })
                 // The creator is always a member, otherwise they cannot be owed anything.
                 ->after(function (ExpenseGroup $record): void {
                     $record->members()->firstOrCreate(
