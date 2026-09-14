@@ -1,0 +1,138 @@
+@import 'tailwindcss';
+
+/*
+ * Design notes
+ * ------------
+ * The app borrows the one convention every paper ledger already used: money leaving is
+ * red, money arriving is black-green, and nothing else in the interface is allowed to use
+ * either colour. Blue means "you can tap this" and is used for nothing else. That leaves
+ * colour carrying real information on a screen that is mostly a list of numbers.
+ *
+ * Public Sans is the type. It was drawn for the US Treasury's public financial interfaces,
+ * so its figures are unambiguous at small sizes — which matters when the difference
+ * between 1,100 and 1,700 is somebody's rent. Amounts are set in Spline Sans Mono so the
+ * columns line up on the decimal; nothing else uses mono.
+ */
+
+@theme {
+  --color-ground: #eef1f4;
+  --color-surface: #ffffff;
+  --color-ink: #10151f;
+  --color-muted: #5b6676;
+  --color-rule: #dde3ea;
+
+  --color-action: #1f4fd8;
+  --color-action-soft: #e8edfd;
+
+  --color-debit: #b42318;   /* money out */
+  --color-credit: #0e7a4f;  /* money in  */
+
+  --font-sans: 'Public Sans', ui-sans-serif, system-ui, sans-serif;
+  --font-mono: 'Spline Sans Mono', ui-monospace, monospace;
+
+  --text-figure: 2.75rem;
+  --text-figure--line-height: 1;
+  --text-figure--letter-spacing: -0.03em;
+}
+
+@layer base {
+  body {
+    background: var(--color-ground);
+    color: var(--color-ink);
+    font-family: var(--font-sans);
+    font-feature-settings: 'ss01', 'cv05';
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--color-action);
+    outline-offset: 2px;
+    border-radius: 2px;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+      animation-duration: 0.01ms !important;
+      transition-duration: 0.01ms !important;
+    }
+  }
+}
+
+@layer components {
+  /* Every amount in the app, so alignment is consistent everywhere. */
+  .figure {
+    font-family: var(--font-mono);
+    font-variant-numeric: tabular-nums;
+    font-feature-settings: 'tnum';
+    text-align: right;
+  }
+
+  .figure-out { color: var(--color-debit); }
+  .figure-in  { color: var(--color-credit); }
+
+  .panel {
+    background: var(--color-surface);
+    border: 1px solid var(--color-rule);
+    border-radius: 0.875rem;
+  }
+
+  /* Ledger rows are separated by a rule rather than by shadowed cards: a list of forty
+     transactions should read as one continuous document, not forty objects. */
+  .ledger-row {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 0.75rem 1rem;
+    align-items: baseline;
+    padding: 0.875rem 1rem;
+    border-bottom: 1px solid var(--color-rule);
+  }
+
+  .ledger-row:last-child { border-bottom: 0; }
+
+  .chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.375rem;
+    padding: 0.125rem 0.5rem;
+    border-radius: 999px;
+    background: var(--color-ground);
+    color: var(--color-muted);
+    font-size: 0.75rem;
+    line-height: 1.5;
+  }
+
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    padding: 0.625rem 1rem;
+    border-radius: 0.625rem;
+    font-weight: 600;
+    background: var(--color-action);
+    color: #fff;
+    transition: background-color 120ms ease;
+  }
+
+  .btn:hover { background: #1a44ba; }
+
+  .btn-quiet {
+    background: transparent;
+    color: var(--color-action);
+    border: 1px solid var(--color-rule);
+  }
+
+  .btn-quiet:hover { background: var(--color-action-soft); }
+
+  .avatar {
+    display: grid;
+    place-items: center;
+    width: 2rem;
+    height: 2rem;
+    border-radius: 999px;
+    background: var(--color-action-soft);
+    color: var(--color-action);
+    font-size: 0.75rem;
+    font-weight: 700;
+  }
+}
